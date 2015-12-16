@@ -4,11 +4,11 @@ from xml.sax import parse
 class PageMaker(ContentHandler):
 	passthrough = False
 	def startElement(self,name,attrs):
-		if name == 'httpSample':
+		if name == 'page':
 			self.passthrough = True
-			self.out = open(attrs['tn']+'.html','w')
+			self.out = open(attrs['name']+'.html','w')
 			self.out.write('<html><head>\n')
-			self.out.write('<title>%s</title>\n' % attrs['tn'])
+			self.out.write('<title>%s</title>\n' % attrs['name'])
 			self.out.write('</head><body>\n')
 		elif self.passthrough:
 			self.out.write('<'+name)
@@ -17,7 +17,7 @@ class PageMaker(ContentHandler):
 			self.out.write('>')
 			
 	def endElement(self,name):
-		if name == 'httpSample':
+		if name == 'page':
 			self.passthrough = False
 			self.out.write('\n</body></html>\n')
 			self.out.close()
@@ -27,4 +27,4 @@ class PageMaker(ContentHandler):
 	def characters(self,chars):
 		if self.passthrough:self.out.write(chars)
 		
-parse('result.xml',PageMaker())
+parse('website.xml',PageMaker())
